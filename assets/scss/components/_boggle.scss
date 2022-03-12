@@ -1,0 +1,408 @@
+.boggle {
+  &__score-board {
+    display: flex;
+    font-size: 1.1rem;
+    font-weight: $font-weight-bold;
+    justify-content: space-between;
+    padding-bottom: 0.5rem;
+    text-transform: uppercase;
+    width: 100%;
+
+    @include media-breakpoint-up(sm) {
+      font-size: 1.25rem;
+    }
+  }
+
+  &__board {
+    &.is-valid,
+    &.is-invalid,
+    &.is-duplicate,
+    &.is-win {
+      pointer-events: none;
+    }
+
+    &.is-win {
+      .boggle {
+        &__tile {
+          background: $green;
+          border-color: $green;
+          color: $white;
+          pointer-events: none;
+        }
+      }
+    }
+  }
+
+  &__board-row {
+    display: flex;
+    margin-bottom: 0.5rem;
+    width: 100%;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__tile {
+    background: none;
+    border: 0.125rem solid $gray;
+    flex: 1;
+    height: auto;
+    margin-right: 0.5rem;
+    outline: 3px solid $white;
+    position: relative;
+    text-align: center;
+    transition: background $transition-default, border-color $transition-default,
+      color $transition-default, outline $transition-default;
+
+    &::before {
+      content: '';
+      float: left;
+      padding-top: 100%;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &:hover {
+      border-color: $gray-dark;
+    }
+
+    &:focus {
+      outline: 3px solid rgba($blue, 0.25);
+      border-color: rgba($blue, 0.25);
+
+      &:not(:focus-visible) {
+        outline: 3px solid $white;
+        border-color: $gray;
+      }
+    }
+
+    &.is-active {
+      background: $gray;
+      border-color: $gray-dark;
+      color: $black;
+    }
+
+    &.is-active-last {
+      border-color: $black;
+      color: $black;
+
+      &:focus {
+        outline: 2px solid rgba($blue, 0.5);
+        border-color: rgba($blue, 0.5);
+
+        &:not(:focus-visible) {
+          outline: 2px solid $white;
+          border-color: $black;
+        }
+      }
+    }
+
+    &.is-selected {
+      background: $gray;
+      border-color: $gray-dark;
+      color: $gray-dark;
+    }
+
+    &.is-disabled {
+      background: $white;
+      border-color: $gray;
+      color: $gray;
+      pointer-events: none;
+    }
+
+    &.is-valid {
+      background: $green;
+      border-color: $green;
+      color: $white;
+    }
+
+    &.is-invalid {
+      background: $red;
+      border-color: $red;
+      color: $white;
+    }
+
+    &.is-duplicate {
+      background: $yellow;
+      border-color: $yellow;
+      color: $white;
+    }
+  }
+
+  &__tile-letter {
+    display: block;
+    font-size: 10vw;
+    font-weight: $font-weight-bold;
+    left: 50%;
+    line-height: 1;
+    pointer-events: none;
+    position: absolute;
+    text-transform: uppercase;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    user-select: none;
+
+    @include media-breakpoint-up(sm) {
+      font-size: 3rem;
+    }
+
+    @include media-breakpoint-up(md) {
+      font-size: 3.5rem;
+    }
+
+    @include media-breakpoint-up(lg) {
+      font-size: 4rem;
+    }
+
+    @include media-breakpoint-up(xl) {
+      font-size: 4.25rem;
+    }
+  }
+
+  &__word {
+    padding-top: 1rem;
+
+    @include media-breakpoint-up(sm) {
+      padding-top: 1.5rem;
+    }
+
+    @include media-breakpoint-up(lg) {
+      padding-top: 2rem;
+    }
+
+    &.is-ready,
+    &.is-valid {
+      .boggle {
+        &__word-text {
+          color: $green;
+        }
+      }
+    }
+
+    &.is-valid {
+      .boggle {
+        &__word-submit {
+          background: $green;
+          color: $white;
+          pointer-events: none;
+
+          &:hover {
+            background: saturate($green, 10%);
+          }
+
+          &:focus {
+            background: saturate($green, 10%);
+            outline: 4px solid rgba(saturate($green, 10%), 0.25);
+
+            &:not(:focus-visible) {
+              background: $green;
+              outline: 4px solid $white;
+            }
+          }
+        }
+      }
+    }
+
+    &.is-active {
+      .boggle {
+        &__word-text {
+          color: $black;
+        }
+
+        &__word-submit {
+          background: $black;
+          color: $white;
+          pointer-events: auto;
+
+          &:hover {
+            background: $black-light;
+          }
+
+          &:focus {
+            background: $blue;
+            outline: 4px solid rgba($blue, 0.25);
+
+            &:not(:focus-visible) {
+              background: $black;
+              outline: 4px solid $white;
+            }
+          }
+        }
+      }
+    }
+
+    &.is-invalid {
+      .boggle {
+        &__word-text {
+          color: $red;
+        }
+
+        &__word-submit {
+          background: $red;
+          color: $white;
+          pointer-events: none;
+
+          &:hover {
+            background: saturate($red, 10%);
+          }
+
+          &:focus {
+            background: saturate($red, 10%);
+            outline: 4px solid rgba(saturate($red, 10%), 0.25);
+
+            &:not(:focus-visible) {
+              background: $red;
+              outline: 4px solid $white;
+            }
+          }
+        }
+      }
+    }
+
+    &.is-duplicate {
+      .boggle {
+        &__word-text {
+          color: $yellow;
+        }
+
+        &__word-submit {
+          background: $yellow;
+          color: $white;
+          pointer-events: none;
+        }
+      }
+    }
+  }
+
+  &__word-text {
+    color: $gray-darker;
+    display: block;
+    font-size: 1.25rem;
+    font-weight: $font-weight-bold;
+    margin-bottom: 1rem;
+    text-align: center;
+    text-transform: uppercase;
+    transition: color $transition-default;
+
+    @include media-breakpoint-up(sm) {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @include media-breakpoint-up(lg) {
+      margin-bottom: 2rem;
+    }
+  }
+
+  &__word-submit {
+    background: $gray-dark;
+    border: none;
+    border-radius: 0.25rem;
+    color: $gray-darker;
+    display: block;
+    font-size: 1rem;
+    outline: 4px solid $white;
+    padding: 0.75rem 1.5rem;
+    pointer-events: none;
+    text-transform: uppercase;
+    transition: background $transition-default, color $transition-default,
+      outline $transition-default;
+    user-select: none;
+    width: 100%;
+
+    @include media-breakpoint-up(sm) {
+      font-size: 1.25rem;
+      padding: 1rem 2rem;
+    }
+  }
+
+  &__share-button {
+    align-items: center;
+    background: $black;
+    border: none;
+    border-radius: 50%;
+    bottom: 16px;
+    color: $white;
+    display: flex;
+    height: 56px;
+    justify-content: center;
+    padding: 0;
+    position: fixed;
+    right: 16px;
+    transition: background $transition-default, color $transition-default,
+      transform $transition-default;
+    width: 56px;
+    z-index: 10;
+
+    @include media-breakpoint-up(md) {
+      background: none;
+      bottom: 24px;
+      color: $black;
+      right: 24px;
+    }
+
+    svg {
+      height: auto;
+      fill: currentColor;
+      width: 60%;
+
+      @include media-breakpoint-up(md) {
+        width: 100%;
+      }
+    }
+
+    &:hover,
+    &:focus {
+      background: $black-light;
+      transform: scale(1.1);
+
+      @include media-breakpoint-up(md) {
+        background: none;
+        color: $black-light;
+      }
+    }
+
+    &.is-win {
+      background: $green;
+      color: $white;
+
+      @include media-breakpoint-up(md) {
+        background: none;
+        color: $green;
+      }
+
+      &:hover,
+      &:focus {
+        background: saturate($green, 10%);
+
+        @include media-breakpoint-up(md) {
+          background: none;
+          color: saturate($green, 10%);
+        }
+      }
+    }
+
+    &.is-lose {
+      background: $red;
+      color: $white;
+
+      @include media-breakpoint-up(md) {
+        background: none;
+        color: $red;
+      }
+
+      &:hover,
+      &:focus {
+        background: saturate($red, 10%);
+
+        @include media-breakpoint-up(md) {
+          background: none;
+          color: saturate($red, 10%);
+        }
+      }
+    }
+  }
+}
