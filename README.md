@@ -2,7 +2,7 @@
 
 A simple boggle-like word game built with vanilla javascript.
 
-(View a Demo Here)[https://jhmsly.github.io/boggle/]
+[View the Demo](https://jhmsly.github.io/boggle/)
 
 *Note: This code is basically first draft code, so it is rough around the edges!*
 
