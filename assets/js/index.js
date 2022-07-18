@@ -18,7 +18,4 @@ window.addEventListener('load', () => {
 
   // Create a new instance of the game.
   const boggle = new Boggle(gameSettingsCustom);
-
-  // Start the game.
-  boggle.play();
 });

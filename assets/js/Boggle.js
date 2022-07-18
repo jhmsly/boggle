@@ -9,19 +9,19 @@
  * Import Components
  */
 
-import Board from "./components/Board";
-import Tile from "./components/Tile";
-import Word from "./components/Word";
-import Dictionary from "./lib/dictionary";
-import ScoreBoard from "./components/ScoreBoard";
-import ShareButton from "./components/ShareButton";
+import Board from './components/Board';
+import Tile from './components/Tile';
+import Word from './components/Word';
+import Dictionary from './lib/dictionary';
+import ScoreBoard from './components/ScoreBoard';
+import ShareButton from './components/ShareButton';
 
 /**
  * Game Constants
  */
 
 // Game Identifier
-const gameIdentifier = "boggle";
+const gameIdentifier = 'boggle';
 
 // Game Container ID
 const gameContainerId = `js-${gameIdentifier}`;
@@ -34,29 +34,29 @@ const gameSettingsDefault = {
     columns: 4,
     rows: 4,
     letters: [
-      "A",
-      "C",
-      "E",
-      "F",
-      "M",
-      "N",
-      "R",
-      "D",
-      "C",
-      "X",
-      "U",
-      "F",
-      "I",
-      "E",
-      "N",
-      "F",
+      'A',
+      'C',
+      'E',
+      'F',
+      'M',
+      'N',
+      'R',
+      'D',
+      'C',
+      'X',
+      'U',
+      'F',
+      'I',
+      'E',
+      'N',
+      'F',
     ],
   },
-  dictionary: ["ACE", "CAM", "RUN"],
+  dictionary: ['ACE', 'CAM', 'RUN'],
   rules: {
     minWordLength: 3,
   },
-  domain: "words.xyz",
+  domain: 'words.xyz',
 };
 
 /**
@@ -79,6 +79,9 @@ export default class Boggle {
   #solvedWords;
   #shareButton;
 
+  /**
+   * @todo: This constructor can be refactored into something more efficient.
+   */
   constructor(customSettings = {}) {
     // Set game identifier, container id and container class.
     this.#settings = { ...gameSettingsDefault, ...customSettings };
@@ -92,30 +95,15 @@ export default class Boggle {
     this.#shareButton = null; // Share button component.
     this.#tiles = []; // Hold tiles.
     this.#activeTiles = []; // Hold active tiles.
-    this.#currentWord = ""; // Current word.
+    this.#currentWord = ''; // Current word.
     this.#solvedWords = [];
-  }
 
-  /**
-   * Start the game.
-   */
-
-  play() {
-    // Initialize game.
-    this.#init();
-  }
-
-  /**
-   * Initialize the game.
-   */
-
-  #init() {
     /**
      * Check if settings are valid and present.
      */
 
     if (!this.#settings)
-      throw new Error("A valid game configuration is required.");
+      throw new Error('A valid game configuration is required.');
     const { board, dictionary, rules } = this.#settings;
 
     /**
@@ -225,8 +213,8 @@ export default class Boggle {
     const wordEntry = new Word(
       {
         text: {
-          initial: "Tap to Play",
-          inactive: "Select a Tile",
+          initial: 'Tap to Play',
+          inactive: 'Select a Tile',
         },
       },
       this.#containerClass
@@ -257,26 +245,27 @@ export default class Boggle {
     gameContainerEl.appendChild(this.#shareButton.el);
 
     /**
-     * Initialize the game controls.
-     */
-
-    this.#initTileControls();
-    this.#initWordControls();
-    this.#initShareControls();
-  }
-
-  /**
-   * Listen for interactions with tiles.
-   */
-
-  #initTileControls() {
-    /**
      * Listen to each tile for a click event.
      */
 
     this.#tiles.forEach((tile) => {
-      tile.el.addEventListener("click", this.#handleTileClick.bind(this, tile));
+      tile.el.addEventListener('click', this.#handleTileClick.bind(this, tile));
     });
+
+    /**
+     * Listen to the submit button for a click event.
+     */
+
+    this.#initWordControls();
+
+    /**
+     * Initialize share button event listener.
+     */
+
+    this.#shareButton.el.addEventListener(
+      'click',
+      this.#handleShareClick.bind(this)
+    );
   }
 
   /**
@@ -292,7 +281,7 @@ export default class Boggle {
     const submitListener = new AbortController();
 
     this.#wordEntry.submitEl.addEventListener(
-      "click",
+      'click',
       this.#handleWordSubmit.bind(this, submitListener),
       { signal: submitListener.signal }
     );
@@ -322,7 +311,7 @@ export default class Boggle {
       .map((tile) => {
         return tile.letter;
       })
-      .join("");
+      .join('');
 
     // Create empty object to store word state.
     const newWordEntryState = {};
@@ -332,7 +321,7 @@ export default class Boggle {
 
     // Set new status for word entry component.
     if (this.#currentWord.length >= this.#settings.rules.minWordLength)
-      newWordEntryState.status = "active";
+      newWordEntryState.status = 'active';
     else newWordEntryState.status = null;
 
     // Update the word entry state.
@@ -364,7 +353,7 @@ export default class Boggle {
     };
 
     // Handle a correct entry.
-    if (result === "valid") {
+    if (result === 'valid') {
       this.#score = this.#score + 1;
 
       this.#scoreBoard.state = {
@@ -378,7 +367,7 @@ export default class Boggle {
 
     // If the game isn't over, reset the board.
     if (
-      result !== "invalid" &&
+      result !== 'invalid' &&
       this.#score !== this.#dictionary.dictionary.length
     ) {
       setTimeout(() => {
@@ -390,41 +379,41 @@ export default class Boggle {
     }
 
     // If the game is over, display an error and end the game.
-    if (result === "invalid") {
-      this.#shareButton.status = "lose";
+    if (result === 'invalid') {
+      this.#shareButton.status = 'lose';
 
       this.#wordEntry.state = {
         text: `Invalid word. Game over!<br />Score: ${this.#score} of ${
           this.#dictionary.dictionary.length
         }`,
-        submitText: "Play again?",
+        submitText: 'Play again?',
         status: result,
       };
     }
 
     // If the game is a success, display a success message and end the game.
     if (
-      result === "valid" &&
+      result === 'valid' &&
       this.#score === this.#dictionary.dictionary.length
     ) {
       this.#board.state = {
-        status: "win",
+        status: 'win',
       };
 
-      this.#shareButton.status = "win";
+      this.#shareButton.status = 'win';
 
       this.#wordEntry.state = {
         text: `You won!<br />Score: ${this.#score} of ${
           this.#dictionary.dictionary.length
         }`,
-        submitText: "Play again?",
+        submitText: 'Play again?',
         status: result,
       };
     }
 
     if (
-      result === "invalid" ||
-      (result === "valid" && this.#score === this.#dictionary.dictionary.length)
+      result === 'invalid' ||
+      (result === 'valid' && this.#score === this.#dictionary.dictionary.length)
     ) {
       // Remove the default event listener for the submit button.
       submitListener.abort();
@@ -433,12 +422,12 @@ export default class Boggle {
       const resetListener = new AbortController();
 
       // Enable button.
-      this.#wordEntry.submitEl.removeAttribute("disabled");
-      this.#wordEntry.submitEl.setAttribute("tabindex", 0);
-      this.#wordEntry.submitEl.setAttribute("style", "pointer-events: auto");
+      this.#wordEntry.submitEl.removeAttribute('disabled');
+      this.#wordEntry.submitEl.setAttribute('tabindex', 0);
+      this.#wordEntry.submitEl.setAttribute('style', 'pointer-events: auto');
 
       this.#wordEntry.submitEl.addEventListener(
-        "click",
+        'click',
         (event) => {
           event.preventDefault();
 
@@ -449,24 +438,13 @@ export default class Boggle {
             game: true,
           });
 
-          this.#wordEntry.submitEl.removeAttribute("style");
+          this.#wordEntry.submitEl.removeAttribute('style');
 
           resetListener.abort();
         },
         { signal: resetListener.signal }
       );
     }
-  }
-
-  /**
-   * Initialize share button event listener.
-   */
-
-  #initShareControls() {
-    this.#shareButton.el.addEventListener(
-      "click",
-      this.#handleShareClick.bind(this)
-    );
   }
 
   /**
@@ -485,7 +463,7 @@ export default class Boggle {
     try {
       await navigator.clipboard.writeText(gameText);
     } catch (error) {
-      console.error("Failed to copy game to clipboard.", error);
+      console.error('Failed to copy game to clipboard.', error);
     }
   }
 
