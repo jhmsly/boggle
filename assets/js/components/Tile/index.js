@@ -38,6 +38,32 @@ export default class Tile {
     this.#state = {
       status: '',
     };
+
+    /**
+     * Initialize the tile DOM element.
+     */
+
+    if (!this.#el) {
+      // Create tile element.
+      const el = document.createElement('button');
+      el.className = `${this.#elClassName}__tile`;
+
+      el.setAttribute('type', 'button');
+      el.setAttribute('tabindex', 0);
+      el.setAttribute('aria-pressed', false);
+      el.setAttribute('data-letter', this.letter);
+      el.setAttribute('data-tile-id', this.id);
+
+      // Store element.
+      this.#el = el;
+
+      // Create tile letter label.
+      const letterEl = document.createElement('span');
+      letterEl.className = `${this.#elClassName}__tile-letter`;
+      letterEl.textContent = this.letter;
+
+      this.#el.appendChild(letterEl);
+    }
   }
 
   /**
@@ -45,9 +71,6 @@ export default class Tile {
    */
 
   get el() {
-    // Initialize the tile element if it has not been initialized.
-    if (!this.#el) this.#init();
-
     // Return the rendered tile element.
     return this.#el;
   }
@@ -81,34 +104,6 @@ export default class Tile {
 
     // Update the status.
     this.#setStatus(status);
-  }
-
-  /**
-   * Initialize the tile DOM element.
-   */
-
-  #init() {
-    if (!this.#el) {
-      // Create tile element.
-      const el = document.createElement('button');
-      el.className = `${this.#elClassName}__tile`;
-
-      el.setAttribute('type', 'button');
-      el.setAttribute('tabindex', 0);
-      el.setAttribute('aria-pressed', false);
-      el.setAttribute('data-letter', this.letter);
-      el.setAttribute('data-tile-id', this.id);
-
-      // Store element.
-      this.#el = el;
-
-      // Create tile letter label.
-      const letterEl = document.createElement('span');
-      letterEl.className = `${this.#elClassName}__tile-letter`;
-      letterEl.textContent = this.letter;
-
-      this.#el.appendChild(letterEl);
-    }
   }
 
   /**

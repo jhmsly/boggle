@@ -34,25 +34,11 @@ export default class ScoreBoard {
     this.#state = {
       score: score,
     };
-  }
 
-  /**
-   * Getter for the score board DOM element.
-   */
+    /**
+     * Initialize the score board DOM element.
+     */
 
-  get el() {
-    // Initialize the tile element if it has not been initialized.
-    if (!this.#el) this.#init();
-
-    // Return the rendered tile element.
-    return this.#el;
-  }
-
-  /**
-   * Initialize the score board DOM element.
-   */
-
-  #init() {
     if (!this.#el) {
       const el = document.createElement('div');
       el.classList.add(`${this.#elClassName}__score-board`);
@@ -69,6 +55,15 @@ export default class ScoreBoard {
       maxScoreEl.textContent = `Max Score: ${this.#maxScore}`;
       el.appendChild(maxScoreEl);
     }
+  }
+
+  /**
+   * Getter for the score board DOM element.
+   */
+
+  get el() {
+    // Return the rendered tile element.
+    return this.#el;
   }
 
   /**

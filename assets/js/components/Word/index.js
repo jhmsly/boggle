@@ -51,6 +51,39 @@ export default class Word {
       submitText: submitText,
       status: status,
     };
+
+    /**
+     * Initialize the word DOM element.
+     */
+
+    if (!this.#el) {
+      // Create word section container.
+      const el = document.createElement('div');
+      el.className = `${this.#elClassName}__word is-${this.#state.status}`;
+
+      // Store element.
+      this.#el = el;
+
+      // Create current word text.
+      const textEl = document.createElement('span');
+      textEl.className = `${this.#elClassName}__word-text`;
+      textEl.innerHTML = this.#initialText;
+      this.#el.appendChild(textEl);
+
+      this.#textEl = textEl;
+
+      // Create submit button.
+      const submitEl = document.createElement('button');
+      submitEl.className = `${this.#elClassName}__word-submit`;
+      submitEl.setAttribute('type', 'button');
+      submitEl.innerHTML = this.#initialSubmitText;
+      this.#el.appendChild(submitEl);
+
+      this.#submitEl = submitEl;
+
+      // Set initial game status.
+      this.#setStatus(this.#state.status);
+    }
   }
 
   /**
@@ -58,9 +91,6 @@ export default class Word {
    */
 
   get el() {
-    // Initialize the tile element if it has not been initialized.
-    if (!this.#el) this.#init();
-
     // Return the rendered word element.
     return this.#el;
   }
@@ -70,9 +100,6 @@ export default class Word {
    */
 
   get submitEl() {
-    // Initialize the tile element if it has not been initialized.
-    if (!this.#el) this.#init();
-
     // Return the rendered submit button.
     return this.#submitEl;
   }
@@ -106,41 +133,6 @@ export default class Word {
 
   get state() {
     return this.#state;
-  }
-
-  /**
-   * Initialize the word DOM element.
-   */
-
-  #init() {
-    if (!this.#el) {
-      // Create word section container.
-      const el = document.createElement('div');
-      el.className = `${this.#elClassName}__word is-${this.#state.status}`;
-
-      // Store element.
-      this.#el = el;
-
-      // Create current word text.
-      const textEl = document.createElement('span');
-      textEl.className = `${this.#elClassName}__word-text`;
-      textEl.innerHTML = this.#initialText;
-      this.#el.appendChild(textEl);
-
-      this.#textEl = textEl;
-
-      // Create submit button.
-      const submitEl = document.createElement('button');
-      submitEl.className = `${this.#elClassName}__word-submit`;
-      submitEl.setAttribute('type', 'button');
-      submitEl.innerHTML = this.#initialSubmitText;
-      this.#el.appendChild(submitEl);
-
-      this.#submitEl = submitEl;
-
-      // Set initial game status.
-      this.#setStatus(this.#state.status);
-    }
   }
 
   /**

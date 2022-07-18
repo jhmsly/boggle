@@ -36,6 +36,31 @@ export default class Board {
       activeTiles: activeTiles,
       status: null,
     };
+
+    /**
+     * Initialize the board DOM element.
+     */
+
+    if (!this.#el) {
+      // Create board element.
+      const el = document.createElement('div');
+      el.className = `${this.#elClassName}__board`;
+
+      // Store element in class.
+      this.#el = el;
+
+      if (this.#tiles.length > 0) {
+        // Create the letter tiles.
+        this.#resetTiles();
+      }
+
+      if (this.#state.activeTiles.length > 0) {
+        // Set the active tiles.
+        this.state = {
+          activeTiles: this.#state.activeTiles,
+        };
+      }
+    }
   }
 
   /**
@@ -43,9 +68,6 @@ export default class Board {
    */
 
   get el() {
-    // Initialize the tile element if it has not been initialized.
-    if (!this.#el) this.#init();
-
     // Return the rendered tile element.
     return this.#el;
   }
@@ -63,7 +85,7 @@ export default class Board {
 
     this.#tiles = tiles;
 
-    this.#initTiles();
+    this.#resetTiles();
   }
 
   /**
@@ -84,37 +106,10 @@ export default class Board {
   }
 
   /**
-   * Initialize the tile DOM element.
-   */
-
-  #init() {
-    if (!this.#el) {
-      // Create board element.
-      const el = document.createElement('div');
-      el.className = `${this.#elClassName}__board`;
-
-      // Store element in class.
-      this.#el = el;
-
-      if (this.#tiles.length > 0) {
-        // Create the letter tiles.
-        this.#initTiles();
-      }
-
-      if (this.#state.activeTiles.length > 0) {
-        // Set the active tiles.
-        this.state = {
-          activeTiles: this.#state.activeTiles,
-        };
-      }
-    }
-  }
-
-  /**
    * Add the tile elements to the board.
    */
 
-  #initTiles() {
+  #resetTiles() {
     // Group tiles array into groups of the number of columns.
     const groupedTiles = [];
 
@@ -179,6 +174,12 @@ export default class Board {
       const lastActiveTile = this.#state.activeTiles.find(
         (tile) => tile.state.status === 'active-last'
       );
+
+      /**
+       * @todo: Do something about the readability of this code. I don't even
+       *        know how it works, this was done by Github Copilot... but it
+       *        works.
+       */
 
       this.#tiles.forEach((tile) => {
         const lastActiveTileId = lastActiveTile.id;
